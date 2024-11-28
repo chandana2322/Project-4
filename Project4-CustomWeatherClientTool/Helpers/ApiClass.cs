@@ -20,8 +20,10 @@ namespace Project6
                         JsonDocument wetherData = JsonDocument.Parse(content);
                         var currentWeatherUnits = wetherData.RootElement.GetProperty("current_weather_units");
                         var currentWeather = wetherData.RootElement.GetProperty("current_weather");
+                        DateTime gmtTime = DateTime.Parse(currentWeather.GetProperty("time").GetString());
+                        DateTime localTime = TimeZoneInfo.ConvertTimeFromUtc(gmtTime, TimeZoneInfo.Local);
                         StringBuilder stringBuilder = new StringBuilder();
-                        stringBuilder.AppendLine($"Time: {currentWeather.GetProperty("time")}");
+                        stringBuilder.AppendLine($"Time: {localTime.ToString("yyyy-MM-dd HH:mm:ss")}");
                         stringBuilder.AppendLine($"Temperature: {currentWeather.GetProperty("temperature")}{currentWeatherUnits.GetProperty("temperature")}");
                         stringBuilder.AppendLine($"Windspeed: {currentWeather.GetProperty("windspeed")}{currentWeatherUnits.GetProperty("windspeed")}");
                         stringBuilder.AppendLine($"winddirection: {currentWeather.GetProperty("winddirection")}{currentWeatherUnits.GetProperty("winddirection")}");
